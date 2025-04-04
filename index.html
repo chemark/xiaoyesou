@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>小野搜索 - New Era AI Search Engine</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome 图标 -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+  />
+  <!-- Tailwind 配置：定制粉红色主色调 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#FF69B4", // HotPink
+            sidebar: "#fff0f5"  // LavenderBlush
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 默认显示中文，隐藏英文 */
+    .lang-en {
+      display: none;
+    }
+    /* 历史记录浮层隐藏 */
+    #historyPanel {
+      display: none;
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-800 flex flex-col min-h-screen">
+  <!-- 顶部导航 -->
+  <header
+    class="w-full bg-white border-b border-gray-200 flex items-center justify-between px-4 py-2"
+  >
+    <!-- 左侧：Logo（可居中或左侧） -->
+    <div class="flex items-center space-x-2">
+      <div class="w-8 h-8">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-8 h-8 text-primary"
+        >
+          <circle cx="10" cy="10" r="7" />
+          <line x1="15" y1="15" x2="21" y2="21" />
+          <path d="M8 10 Q9 6, 12 9 Q14 12, 10 13 Z" />
+        </svg>
+      </div>
+      <span class="text-primary text-xl font-bold">小野搜索</span>
+    </div>
+    <!-- 右侧：语言切换按钮 -->
+    <button
+      id="langToggle"
+      class="border border-gray-300 rounded px-2 py-1 text-sm text-gray-600"
+    >
+      中/En
+    </button>
+  </header>
+
+  <!-- 主内容区域 -->
+  <main class="flex-1 flex flex-col items-center justify-center px-4 py-4">
+    <!-- 主Logo + 标语 -->
+    <div class="mb-6 text-center">
+      <div class="flex items-center justify-center mb-4">
+        <div class="w-12 h-12 flex items-center justify-center">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-10 h-10 text-primary"
+          >
+            <circle cx="10" cy="10" r="7" />
+            <line x1="15" y1="15" x2="21" y2="21" />
+            <path d="M8 10 Q9 6, 12 9 Q14 12, 10 13 Z" />
+          </svg>
+        </div>
+      </div>
+      <h1 class="text-primary text-3xl font-bold mb-2">小野搜索</h1>
+      <p class="text-gray-600 text-base">
+        <span class="lang-zh">新时代的 AI 搜索引擎，快速直接地给出答案</span>
+        <span class="lang-en">New Era AI Search Engine, Answer quickly and directly</span>
+      </p>
+    </div>
+
+    <!-- 搜索框 + 按钮 -->
+    <div class="w-full max-w-md">
+      <div class="relative rounded-xl border border-gray-300 bg-white p-4 mb-4">
+        <div class="flex items-center">
+          <i class="fas fa-search text-gray-400 mr-2"></i>
+          <input
+            id="mainSearch"
+            type="text"
+            placeholder="搜索任意内容..."
+            class="flex-1 outline-none text-gray-700"
+            data-placeholder-zh="搜索任意内容..."
+            data-placeholder-en="Search anything..."
+          />
+        </div>
+        <div class="flex items-center justify-between mt-4">
+          <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-2">
+              <div
+                class="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center"
+              >
+                <i class="fas fa-globe text-xs text-gray-600"></i>
+              </div>
+              <span class="text-sm text-gray-700">
+                <span class="lang-zh">全部</span>
+                <span class="lang-en">All</span>
+              </span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <div
+                class="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center"
+              >
+                <i class="fas fa-robot text-xs text-gray-600"></i>
+              </div>
+              <span class="text-sm text-gray-700">
+                <span class="lang-zh">GPT-4o mini</span>
+                <span class="lang-en">GPT-4o mini</span>
+              </span>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2">
+            <span class="text-sm text-gray-700">
+              <span class="lang-zh">搜索</span>
+              <span class="lang-en">Search</span>
+            </span>
+            <button
+              id="searchButton"
+              class="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center"
+            >
+              <i class="fas fa-arrow-right text-xs"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 搜索结果显示区域 -->
+      <div id="searchResults" class="w-full"></div>
+    </div>
+  </main>
+
+  <!-- 底部导航栏 (Arc/Chrome 移动端风格) -->
+  <nav
+    class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around items-center py-2"
+  >
+    <!-- 首页按钮 -->
+    <button
+      class="flex flex-col items-center text-gray-600 hover:text-primary"
+      onclick="scrollToTop()"
+    >
+      <i class="fas fa-home text-lg"></i>
+      <span class="text-xs">
+        <span class="lang-zh">首页</span>
+        <span class="lang-en">Home</span>
+      </span>
+    </button>
+    <!-- 搜索历史按钮 -->
+    <button
+      id="historyToggle"
+      class="flex flex-col items-center text-gray-600 hover:text-primary"
+    >
+      <i class="fas fa-history text-lg"></i>
+      <span class="text-xs">
+        <span class="lang-zh">历史</span>
+        <span class="lang-en">History</span>
+      </span>
+    </button>
+    <!-- 个人信息按钮 -->
+    <button
+      class="flex flex-col items-center text-gray-600 hover:text-primary"
+      onclick="alert('星树浩：Pro用户，更多功能敬请期待...')"
+    >
+      <i class="fas fa-user text-lg"></i>
+      <span class="text-xs">
+        <span class="lang-zh">我的</span>
+        <span class="lang-en">Me</span>
+      </span>
+    </button>
+  </nav>
+
+  <!-- 搜索历史面板 (移动端弹层) -->
+  <div
+    id="historyPanel"
+    class="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50"
+  >
+    <div class="bg-white w-5/6 max-w-sm rounded-lg shadow-lg p-4 relative">
+      <button
+        class="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+        onclick="toggleHistory(false)"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+      <h2 class="text-lg font-bold mb-2">
+        <span class="lang-zh">搜索历史</span>
+        <span class="lang-en">Search History</span>
+      </h2>
+      <div
+        id="searchHistoryList"
+        class="space-y-1 text-sm text-gray-700 overflow-y-auto max-h-60"
+      >
+        <!-- 动态插入历史记录 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部版权 -->
+  <footer class="mt-16 mb-2 text-center text-sm text-gray-600">
+    © 2025 星树浩. 版权所有.
+  </footer>
+
+  <!-- 交互脚本 -->
+  <script>
+    /* ============ 语言切换 ============ */
+    let currentLang = "zh";
+    function toggleLanguage() {
+      currentLang = currentLang === "zh" ? "en" : "zh";
+      document.querySelectorAll(".lang-zh").forEach((el) => {
+        el.style.display = currentLang === "zh" ? "inline" : "none";
+      });
+      document.querySelectorAll(".lang-en").forEach((el) => {
+        el.style.display = currentLang === "en" ? "inline" : "none";
+      });
+      const mainSearch = document.getElementById("mainSearch");
+      mainSearch.placeholder = mainSearch.getAttribute(
+        "data-placeholder-" + currentLang
+      );
+    }
+    document
+      .getElementById("langToggle")
+      .addEventListener("click", toggleLanguage);
+
+    /* ============ 滚动回顶部 ============ */
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    /* ============ 搜索功能 & 历史记录 ============ */
+    function loadSearchHistory() {
+      const history = JSON.parse(localStorage.getItem("searchHistory")) || [];
+      const container = document.getElementById("searchHistoryList");
+      container.innerHTML = "";
+      history.forEach((query) => {
+        const div = document.createElement("div");
+        div.className =
+          "p-2 bg-gray-100 hover:bg-gray-200 rounded cursor-pointer";
+        div.innerText = query;
+        div.addEventListener("click", () => {
+          document.getElementById("mainSearch").value = query;
+          toggleHistory(false);
+          performSearch();
+        });
+        container.appendChild(div);
+      });
+    }
+    function saveSearchQuery(query) {
+      let history = JSON.parse(localStorage.getItem("searchHistory")) || [];
+      // 若已存在则不重复添加
+      if (!history.includes(query)) {
+        history.unshift(query);
+        // 只保留 10 条
+        if (history.length > 10) history = history.slice(0, 10);
+        localStorage.setItem("searchHistory", JSON.stringify(history));
+      }
+      loadSearchHistory();
+    }
+    function performSearch() {
+      const query = document.getElementById("mainSearch").value.trim();
+      if (!query) return;
+      saveSearchQuery(query);
+      const resultsContainer = document.getElementById("searchResults");
+      resultsContainer.innerHTML = `
+        <div class="p-4 bg-gray-100 rounded mt-2 text-center">
+          模拟搜索结果 for <strong>${query}</strong>
+        </div>
+      `;
+      scrollToTop();
+    }
+    document
+      .getElementById("searchButton")
+      .addEventListener("click", performSearch);
+    window.addEventListener("load", loadSearchHistory);
+
+    /* ============ 历史记录弹层开关 ============ */
+    const historyPanel = document.getElementById("historyPanel");
+    function toggleHistory(show) {
+      historyPanel.style.display = show ? "flex" : "none";
+    }
+    document
+      .getElementById("historyToggle")
+      .addEventListener("click", () => toggleHistory(true));
+  </script>
+</body>
+</html>
