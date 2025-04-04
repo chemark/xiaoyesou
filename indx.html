@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小野搜索 - New Era AI Search Engine</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome 图标 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <!-- Tailwind 配置：定制粉红色主色调 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#FF69B4", // HotPink
+            sidebar: "#fff0f5"  // LavenderBlush
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 默认显示中文，隐藏英文 */
+    .lang-en { display: none; }
+  </style>
+</head>
+<body class="flex h-screen bg-white">
+  <!-- Sidebar -->
+  <div class="w-64 bg-sidebar border-r border-gray-200 flex flex-col">
+    <!-- Logo (自定义 SVG 图标) -->
+    <div class="flex items-center p-4">
+      <div class="w-10 h-10 flex items-center justify-center">
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="w-8 h-8 text-primary">
+          <circle cx="10" cy="10" r="7" />
+          <line x1="15" y1="15" x2="21" y2="21" />
+          <path d="M8 10 Q9 6, 12 9 Q14 12, 10 13 Z" />
+        </svg>
+      </div>
+      <span class="text-primary text-2xl font-bold ml-2">小野搜索</span>
+    </div>
+
+    <!-- 搜索框 -->
+    <div class="px-4 py-2">
+      <div class="relative">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+          <i class="fas fa-search text-gray-400"></i>
+        </span>
+        <input type="text" placeholder="Search" class="w-full pl-9 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+      </div>
+    </div>
+
+    <!-- 搜索历史 / Search History -->
+    <div class="px-4 py-2">
+      <div class="flex items-center justify-between cursor-pointer">
+        <div class="flex items-center">
+          <i class="fas fa-history text-gray-600 mr-2"></i>
+          <span class="text-gray-700">
+            <span class="lang-zh">搜索历史</span>
+            <span class="lang-en">Search History</span>
+          </span>
+        </div>
+        <i class="fas fa-chevron-down text-gray-600"></i>
+      </div>
+    </div>
+
+    <!-- 搜索示例：哲学 & 科技方向 -->
+    <div class="flex-1 overflow-y-auto">
+      <div class="px-4 py-1">
+        <div class="py-2 px-3 text-sm text-gray-700 hover:bg-gray-200 rounded-md cursor-pointer">
+          <span class="lang-zh">生命的意义是什么？</span>
+          <span class="lang-en">What is the meaning of life?</span>
+        </div>
+        <div class="py-2 px-3 text-sm text-gray-700 hover:bg-gray-200 rounded-md cursor-pointer">
+          <span class="lang-zh">如何区分现实与虚拟世界？</span>
+          <span class="lang-en">How to differentiate reality from the virtual world?</span>
+        </div>
+        <div class="py-2 px-3 text-sm text-gray-700 hover:bg-gray-200 rounded-md cursor-pointer">
+          <span class="lang-zh">人类应如何面对 AI 的崛起？</span>
+          <span class="lang-en">How should humanity face the rise of AI?</span>
+        </div>
+        <div class="py-2 px-3 text-sm text-gray-700 hover:bg-gray-200 rounded-md cursor-pointer">
+          <span class="lang-zh">元宇宙的潜力与挑战是什么？</span>
+          <span class="lang-en">What are the potentials and challenges of the Metaverse?</span>
+        </div>
+        <div class="py-2 px-3 text-sm text-gray-700 hover:bg-gray-200 rounded-md cursor-pointer">
+          <span class="lang-zh">可持续能源的未来在何方？</span>
+          <span class="lang-en">What is the future of sustainable energy?</span>
+        </div>
+        <div class="py-2 px-3 text-sm text-gray-700 hover:bg-gray-200 rounded-md cursor-pointer">
+          <span class="lang-zh">量子力学能否解释意识？</span>
+          <span class="lang-en">Can quantum mechanics explain consciousness?</span>
+        </div>
+        <div class="py-2 px-3 text-sm text-gray-700 hover:bg-gray-200 rounded-md cursor-pointer">
+          <span class="lang-zh">脑机接口有哪些风险与机遇？</span>
+          <span class="lang-en">What are the risks and opportunities of brain-computer interfaces?</span>
+        </div>
+        <div class="py-2 px-3 text-sm text-gray-700 hover:bg-gray-200 rounded-md cursor-pointer">
+          <span class="lang-zh">人类与宇宙的终极命运如何？</span>
+          <span class="lang-en">What is the ultimate fate of humanity and the universe?</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 用户资料（星树浩） -->
+    <div class="border-t border-gray-200 p-4 flex items-center">
+      <div class="w-10 h-10 rounded-full overflow-hidden bg-gray-200">
+        <!-- 可替换为另一段 SVG 或自定义头像 -->
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="w-8 h-8 text-primary">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M14.31 8l5.74 9.94" />
+          <path d="M9.69 8h11.48" />
+          <path d="M7.38 12l5.74-9.94" />
+          <path d="M7.38 12L2.64 2.06" />
+          <path d="M16.62 12l5.74 9.94" />
+          <path d="M9.69 16L2.64 21.94" />
+          <path d="M14.31 16h11.48" />
+        </svg>
+      </div>
+      <div class="ml-3">
+        <div class="text-sm font-medium text-gray-900">星树浩</div>
+        <div class="text-xs text-pink-600 bg-pink-100 px-2 rounded-full">pro</div>
+      </div>
+    </div>
+
+    <!-- 底部功能按钮 -->
+    <div class="border-t border-gray-200 p-4 flex items-center justify-between">
+      <button class="text-gray-600 hover:text-gray-900">
+        <i class="fas fa-globe"></i>
+      </button>
+      <button class="text-gray-600 hover:text-gray-900">
+        <i class="fas fa-moon"></i>
+      </button>
+      <button class="text-gray-600 hover:text-gray-900">
+        <i class="fas fa-cog"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- 主内容区域 -->
+  <div class="flex-1 flex flex-col">
+    <!-- 头部区域 -->
+    <div class="p-4 flex justify-end items-center">
+      <!-- 语言切换按钮 -->
+      <button id="langToggle" class="border border-gray-300 rounded p-2 mr-4">中/En</button>
+      <button class="border border-gray-300 rounded p-2"><i class="fas fa-columns"></i></button>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="flex-1 flex flex-col items-center justify-center px-4">
+      <!-- Logo (自定义 SVG 图标) -->
+      <div class="flex items-center mb-6">
+        <div class="w-12 h-12 flex items-center justify-center">
+          <svg viewBox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="w-10 h-10 text-primary">
+            <circle cx="10" cy="10" r="7" />
+            <line x1="15" y1="15" x2="21" y2="21" />
+            <path d="M8 10 Q9 6, 12 9 Q14 12, 10 13 Z" />
+          </svg>
+        </div>
+        <span class="text-primary text-4xl font-bold ml-2">小野搜索</span>
+      </div>
+
+      <!-- Tagline 双语版本 -->
+      <h1 class="text-xl text-gray-700 mb-8 text-center">
+        <span class="lang-zh">新时代的 AI 搜索引擎，快速直接地给出答案</span>
+        <span class="lang-en">New Era AI Search Engine, Answer quickly and directly</span>
+      </h1>
+
+      <!-- 搜索框 -->
+      <div class="w-full max-w-3xl">
+        <div class="relative rounded-xl border border-gray-300 bg-white p-4">
+          <div class="flex items-center">
+            <i class="fas fa-search text-gray-400 mr-2"></i>
+            <input id="mainSearch" type="text" placeholder="搜索任意内容..." class="flex-1 outline-none text-gray-700" data-placeholder-zh="搜索任意内容..." data-placeholder-en="Search anything...">
+          </div>
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex items-center space-x-4">
+              <div class="flex items-center space-x-2">
+                <div class="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center">
+                  <i class="fas fa-globe text-xs text-gray-600"></i>
+                </div>
+                <span class="text-sm text-gray-700">
+                  <span class="lang-zh">全部</span>
+                  <span class="lang-en">All</span>
+                </span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <div class="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center">
+                  <i class="fas fa-robot text-xs text-gray-600"></i>
+                </div>
+                <span class="text-sm text-gray-700">
+                  <span class="lang-zh">GPT-4o mini</span>
+                  <span class="lang-en">GPT-4o mini</span>
+                </span>
+              </div>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-sm text-gray-700">
+                <span class="lang-zh">搜索</span>
+                <span class="lang-en">Search</span>
+              </span>
+              <button class="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center">
+                <i class="fas fa-arrow-right text-xs"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部 Footer -->
+    <div class="p-6 flex flex-col items-center">
+      <!-- 社交链接（可自定义） -->
+      <div class="flex space-x-6 mb-4">
+        <a href="#" class="text-gray-600 hover:text-gray-900"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="text-gray-600 hover:text-gray-900"><i class="fab fa-product-hunt"></i></a>
+        <a href="#" class="text-gray-600 hover:text-gray-900"><i class="fab fa-github"></i></a>
+        <a href="#" class="text-gray-600 hover:text-gray-900"><i class="fab fa-discord"></i></a>
+        <a href="#" class="text-gray-600 hover:text-gray-900"><i class="fas fa-envelope"></i></a>
+      </div>
+      <!-- © 2025 星树浩. 版权所有. -->
+      <div class="text-sm text-gray-600">
+        © 2025 星树浩. 版权所有.
+      </div>
+    </div>
+  </div>
+
+  <!-- 语言切换脚本 -->
+  <script>
+    // 默认语言：中文（zh）
+    let currentLang = "zh";
+
+    // 切换函数：隐藏/显示对应语言的元素
+    function toggleLanguage() {
+      currentLang = currentLang === "zh" ? "en" : "zh";
+      document.querySelectorAll('.lang-zh').forEach(el => {
+        el.style.display = (currentLang === "zh") ? "inline" : "none";
+      });
+      document.querySelectorAll('.lang-en').forEach(el => {
+        el.style.display = (currentLang === "en") ? "inline" : "none";
+      });
+      // 同步搜索框的 placeholder
+      const mainSearch = document.getElementById('mainSearch');
+      mainSearch.placeholder = mainSearch.getAttribute('data-placeholder-' + currentLang);
+    }
+
+    // 绑定语言切换按钮事件
+    document.getElementById('langToggle').addEventListener('click', toggleLanguage);
+  </script>
+</body>
+</html>
